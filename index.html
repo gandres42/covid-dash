@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" id="document">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="selection">
+        <button id="getData" onclick="getData()">Get Data</button>
+        <div id="countrylabel">Country: </div>
+        <select id = "country" onchange="changeCountry()"></select>
+        <input type="date" id="date1" name="Date 1" onchange="dateChanged = true; console.log(dateChanged)";>
+        <p id="dash"> - </p>
+        <input type="date" id="date2" name="Date 2" onchange="dateChanged = true">
+
+        <button id="overview" onclick="overview()">Overview</button>
+        <button id="history" onclick="history()">History</button>
+        <button></button>
+    </div>
+
+    <div id="tablecontainer">
+        <table id="titlebar">
+            <tr>
+                <th>Date</th>
+                <th>Total Cases</th>
+                <th>New Cases</th>
+                <th>Total Death</th>
+                <th>New Deaths</th>
+                <th>Recovered</th>
+            </tr>
+        </table>
+        <div id="rawcontainer">
+            <table id="rawvals"></table>
+        </div>
+    </div>
+
+    <div id="chartcontainer">
+        <canvas id="totalCases"></canvas>
+        <canvas id="newCases"></canvas>
+        <canvas id="totalDeaths"></canvas>
+        <canvas id="newDeaths"></canvas>
+        <canvas id="recovered"></canvas>
+    </div>
+
+    <div id="overviewcontainer">
+        <h1 id="overviewTitle">Current Statistics of USA </h1>
+
+        <h2 id="overviewNewTitle">New Cases Today:</h2>
+        <h2 id="overviewNew">loading</h2>
+
+        <h1 id="overviewCasesTitle">Total Cases:</h1>
+        <h1 id="overviewCases">loading</h1>
+
+        <h2 id="overviewActiveTitle">Active Cases:</h2>
+        <h2 id="overviewActive">loading</h2>
+
+        <h2 id="overviewP1MTitle">Cases per Million:</h2>
+        <h2 id="overviewP1M">loading</h2>
+
+        <h2 id="overviewRecoverTitle">Recovered:</h2>
+        <h2 id="overviewRecover">loading</h2>
+    </div>
+
+    <div id="loadingbackground">
+        <h1 id="loadingtext">Downloading Data</h1>
+        <h1 id="loadingprogress">x/x</h1>
+    </div>
+</body>
+</html>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="index.js"></script>
+<link href="index.css" rel="stylesheet">

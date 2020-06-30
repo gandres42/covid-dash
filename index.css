@@ -22,7 +22,7 @@ td
     width: calc(100% - 17px);
     height: 25px;
     white-space: nowrap;
-    font-size: 70%;
+    font-size: .8vw;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -33,30 +33,6 @@ td
     overflow-y: scroll;
     bottom: 1px;
     top: 25px;
-}
-
-
-
-#loadingbackground
-{
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    visibility: hidden;
-    z-index: 100;
-}
-
-#loadingtext
-{
-    font-family: 'Montserrat', sans-serif;
-    color: white;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
 }
 
 #loadingprogress
@@ -74,7 +50,7 @@ td
 {
     background: white;
     position: absolute;
-    right: 50%;
+    right: 40%;
     bottom: 6px;
     left: 6px;
     top: 52px;
@@ -119,7 +95,7 @@ td
     background: white;
     position: absolute;
     top: 52px;
-    left: calc(50% + 6px);
+    left: calc(60% + 6px);
     right: 6px;
     bottom: 6px;
     border: white;
@@ -127,32 +103,10 @@ td
     border-radius: 3px;
 }
 
-#getData
-{
-    color: white;
-    transition-duration: .5s;
-    font-family: 'Montserrat', sans-serif;
-    border: none;
-    background: #3ab171;
-    border-radius: 2px;
-    position: absolute;
-    left: 1px;
-    top: 1px;
-    bottom: 1px;
-    width: 87px;
-}
-
-#getData:hover
-{
-    color: black;
-    background: #4ae292;
-    transition-duration: .5s;
-}
-
 #country
 {
     position: absolute;
-    left: 153px;
+    left: 63.5px;
     top: 1px;
     bottom: 1px;
     border: none;
@@ -162,7 +116,7 @@ td
     background: lightgrey;
     border-radius: 2px;
     font-family: 'Montserrat', sans-serif;
-    padding-left: 2px;
+    padding-left: 4px;
     width: 200px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -170,13 +124,13 @@ td
 
 #countrylabel
 {
-    background: lightgrey;
+    background: dodgerblue;
     top: 1px;
     bottom: 1px;
     position: absolute;
-    left: 91px;
+    left: 1.5px;
     font-family: 'Montserrat', sans-serif;
-    color: black;
+    color: white;
     border-radius: 2px;
     line-height: 28px;
     font-size: small;

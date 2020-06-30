@@ -6,16 +6,10 @@
 </head>
 <body>
     <div id="selection">
-        <button id="getData" onclick="getData()">Get Data</button>
         <div id="countrylabel">Country: </div>
-        <select id = "country" onchange="changeCountry()"></select>
-        <input type="date" id="date1" name="Date 1" onchange="dateChanged = true; console.log(dateChanged)";>
-        <p id="dash"> - </p>
-        <input type="date" id="date2" name="Date 2" onchange="dateChanged = true">
-
+        <select id = "country" onchange="getData()"></select>
         <button id="overview" onclick="overview()">Overview</button>
         <button id="history" onclick="history()">History</button>
-        <button></button>
     </div>
 
     <div id="tablecontainer">
@@ -61,10 +55,7 @@
         <h2 id="overviewRecover">loading</h2>
     </div>
 
-    <div id="loadingbackground">
-        <h1 id="loadingtext">Downloading Data</h1>
-        <h1 id="loadingprogress">x/x</h1>
-    </div>
+
 </body>
 </html>
 

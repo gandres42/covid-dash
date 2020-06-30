@@ -1,30 +1,31 @@
+//overall data to be filled by history call
 var data = [];
+
+//list ouf countries for the dropdown menu
 var countries;
-var progress = 0;
-var lonks = 0;
+
+//graphs store location for clearancea after each use
 var tcase;
 var ncase;
 var tdeath;
 var ndeath;
 var recov;
+
+//for use when determining what page is open
 var page = 'overview';
-var overviewCountry = 'USA';
-var historyCountry = 'USA';
-var dateChanged = true;
-var countryChanged = true;
 
 
 
 //get list of countries for the dropdown menu
-fetch("https://covid-193.p.rapidapi.com/countries", {
+fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
     "method": "GET",
     "headers": {
-        "x-rapidapi-host": "covid-193.p.rapidapi.com",
+        "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
         "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
     }
-})
-    .then(response => response.json()).then(json => {
-    countries = Object.values(json.response)
+}).then(response => response.json()).then(json => {
+    countries = json.affected_countries
+    countries.sort()
     for (var i = 0; i < countries.length; i++)
     {
         var x = document.getElementById("country");
@@ -35,104 +36,64 @@ fetch("https://covid-193.p.rapidapi.com/countries", {
         x.add(option, x[x.length]);
     }
     document.getElementById('country').value = 'USA';
-    getCurrent();
+    getData()
 })
 
-//raw function to get historical results
-function getHistory(country, date)
-{
-    fetch("https://covid-193.p.rapidapi.com/history?day=" + date + "&country=" + country, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "covid-193.p.rapidapi.com",
-                "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
-            }
-        }).then(response => response.json()).then(json => {
-
-        if (json.response[0] != null)
-        {
-            data.push(json.response[0])
-        }
-
-        progress += 1;
-        console.clear()
-        console.log(progress + "/" + lonks);
-        document.getElementById('loadingprogress').innerHTML = progress + "/" + lonks;
-        if (progress == lonks)
-        {
-            console.clear()
-            document.getElementById('loadingbackground').style.visibility = "hidden";
-            data.sort(function(a, b) {
-                return new Date(a.day) - new Date(b.day);
-            });
-            console.clear();
-            console.log('Data from dates selected:')
-            console.log(data)
-            fillTable();
-            createCharts();
-        }
-    })
-}
-
-//raw function to get current results, uses history api call but just read index 0 of the results for the latest stats
+//raw function to get current results, gets latest stats and fills relevant headers with data
 function getCurrent()
 {
-    fetch("https://covid-193.p.rapidapi.com/history?day=" + getCurrentDate() + "&country=" + document.getElementById('country').value, {
+    fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=" + document.getElementById('country').value, {
         "method": "GET",
         "headers": {
-            "x-rapidapi-host": "covid-193.p.rapidapi.com",
+            "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
             "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
         }
     }).then(response => response.json()).then(json => {
-        console.clear();
-        console.log('Current data for entire day, latest entry 0:');
+        console.log('current data for country');
         console.log(json);
-        document.getElementById('overviewCases').innerHTML = json.response[0].cases.total;
-        document.getElementById('overviewNew').innerHTML = json.response[0].cases.new;
-        document.getElementById('overviewActive').innerHTML = json.response[0].cases.active;
-        document.getElementById('overviewP1M').innerHTML = json.response[0].cases['1M_pop'];
-        document.getElementById('overviewRecover').innerHTML = json.response[0].cases.recovered;
-        document.getElementById('overviewTitle').innerHTML = 'Current Statistics of ' + overviewCountry
+        document.getElementById('overviewCases').innerHTML = json.latest_stat_by_country[0].total_cases;
+        if (json.latest_stat_by_country[0].new_cases == "")
+        {
+            document.getElementById('overviewNew').innerHTML = '0';
+        }
+        else
+        {
+            document.getElementById('overviewNew').innerHTML = json.latest_stat_by_country[0].new_cases;
+        }
+        document.getElementById('overviewActive').innerHTML = json.latest_stat_by_country[0].active_cases;
+        document.getElementById('overviewP1M').innerHTML = json.latest_stat_by_country[0].total_cases_per1m;
+        document.getElementById('overviewRecover').innerHTML = json.latest_stat_by_country[0].total_recovered;
+        document.getElementById('overviewTitle').innerHTML = 'Current Statistics of ' + document.getElementById('country').value
     })
 }
 
-//returns the current date in yyy-mm-dd format
-function getCurrentDate()
-{
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
-
-    return today
-}
-
-//interface function for getHistory, calling and recording each individual function call
-function totalResults(date1, date2, country)
+//get all past history on the country currently selected excluding current date, fills the data array, then calls charts and tables on completion
+function getHistory()
 {
     data.length = 0;
-    if (country != '' && (countryChanged || !tcase || dateChanged))
-    {
-        countryChanged = false;
-        dateChanged = false;
-        document.getElementById('loadingbackground').style.visibility = "visible";
-        var dates = getDates(date1, date2);
-        lonks = dates.length;
-        progress = 0;
-        document.getElementById('loadingprogress').innerHTML = "0/" + lonks;
-        for (var i = 0; i < dates.length; i++)
-        {
-            getHistory(country, dates[i])
+    fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+            "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
         }
-    }
-    else
-    {
-        alert("No fields have been changed, to reduce network use your request has been blocked")
-    }
+    }).then(response => response.json()).then(json => {
+
+        for (var i = (json.stat_by_country.length - 1); i > 0; i--)
+        {
+           if (json.stat_by_country[i].record_date.substr(0, 10) !== json.stat_by_country[i - 1].record_date.substr(0, 10))
+           {
+               data.push(json.stat_by_country[i])
+           }
+        }
+        console.log('all historical data for country');
+        console.log(data)
+        fillTable();
+        createCharts();
+    })
 }
 
+//clears table then populates with contents of data array
 function fillTable()
 {
     document.getElementById("rawvals").innerHTML = "";
@@ -142,20 +103,22 @@ function fillTable()
         var row = table.insertRow(0);
 
         var cell0 = row.insertCell(0);
-        cell0.innerHTML = data[i].day.substr(2, 9);
+        cell0.innerHTML = data[i].record_date.substr(0, 10);
         cell0.style.fontFamily = 'Montserrat';
         cell0.style.textAlign = 'center';
+        cell0.style.fontSize = '1vw';
 
         var cell1 = row.insertCell(1);
-        cell1.innerHTML = data[i].cases.total;
+        cell1.innerHTML = data[i].total_cases;
         cell1.style.fontFamily = 'Montserrat';
         cell1.style.textAlign = 'center';
+        cell1.style.fontSize = '1vw';
 
         var cell2 = row.insertCell(2);
 
-        if (data[i].cases.new != null)
+        if (data[i].new_cases != "")
         {
-            cell2.innerHTML = data[i].cases.new;
+            cell2.innerHTML = data[i].new_cases;
             cell2.style.fontFamily = 'Montserrat';
             cell2.style.textAlign = 'center';
         }
@@ -165,17 +128,19 @@ function fillTable()
             cell2.style.fontFamily = 'Montserrat';
             cell2.style.textAlign = 'center';
         }
+        cell2.style.fontSize = '1vw';
 
 
         var cell3 = row.insertCell(3);
-        cell3.innerHTML = data[i].deaths.total;
+        cell3.innerHTML = data[i].total_deaths;
         cell3.style.fontFamily = 'Montserrat';
         cell3.style.textAlign = 'center';
+        cell3.style.fontSize = '1vw';
 
         var cell4 = row.insertCell(4);
-        if (data[i].deaths.new != null)
+        if (data[i].new_deaths != "")
         {
-            cell4.innerHTML = data[i].deaths.new;
+            cell4.innerHTML = data[i].new_deaths;
             cell4.style.fontFamily = 'Montserrat';
             cell4.style.textAlign = 'center';
         }
@@ -185,11 +150,13 @@ function fillTable()
             cell4.style.fontFamily = 'Montserrat';
             cell4.style.textAlign = 'center';
         }
+        cell4.style.fontSize = '1vw';
 
         var cell5 = row.insertCell(5);
-        cell5.innerHTML = data[i].cases.recovered;
+        cell5.innerHTML = data[i].total_recovered;
         cell5.style.fontFamily = 'Montserrat';
         cell5.style.textAlign = 'center';
+        cell5.style.fontSize = '1vw';
     }
 }
 
@@ -199,6 +166,7 @@ Date.prototype.addDays = function(days) {
     return date;
 }
 
+//no longer needed, soon removing date selection
 function getDates(startDate, stopDate) {
     var dateArray = new Array();
     var currentDate = startDate;
@@ -237,52 +205,52 @@ function createCharts()
     var recovery = [];
     for (var i = 0; i < data.length; i++)
     {
-        if (data[i].cases.total != null)
+        if (data[i].total_cases != "")
         {
-            tcasesy.push(data[i].cases.total);
+            tcasesy.push(data[i].total_cases.replace(/,/g,""));
         }
         else
         {
             tcasesy.push(0)
         }
 
-        if (data[i].deaths.total != null)
+        if (data[i].total_deaths != "")
         {
-            tdeathy.push(data[i].deaths.total);
+            tdeathy.push(data[i].total_deaths.replace(/,/g,""));
         }
         else
         {
             tdeathy.push(0)
         }
 
-        if (data[i].deaths.new != null)
+        if (data[i].new_deaths != "")
         {
-            ndeathy.push(data[i].deaths.new);
+            ndeathy.push(data[i].new_deaths.replace(/,/g,""));
         }
         else
         {
             ndeathy.push(0)
         }
 
-        if (data[i].cases.new != null)
+        if (data[i].new_cases != "")
         {
-            ncasesy.push(data[i].cases.new);
+            ncasesy.push(data[i].new_cases.replace(/,/g,""));
         }
         else
         {
             ncasesy.push(0)
         }
 
-        if (data[i].cases.recovered != null)
+        if (data[i].total_recovered != "")
         {
-            recovery.push(data[i].cases.recovered);
+            recovery.push(data[i].total_recovered.replace(/,/g,""));
         }
         else
         {
             recovery.push(0)
         }
 
-        x.push(data[i].day);
+        x.push(data[i].record_date.substr(0, 10));
     }
 
     if (tcase)
@@ -391,13 +359,11 @@ function createCharts()
     });
 }
 
+//overview and history control page switching niceties
 function overview()
 {
-    document.getElementById('country').value = overviewCountry;
     page = 'overview';
-    document.getElementById('date1').style.visibility = 'hidden';
-    document.getElementById('date2').style.visibility = 'hidden';
-    document.getElementById('dash').style.visibility = 'hidden';
+
     document.getElementById('overviewcontainer').style.visibility = 'visible';
     document.getElementById('tablecontainer').style.visibility = 'hidden';
     document.getElementById('chartcontainer').style.visibility = 'hidden';
@@ -406,14 +372,10 @@ function overview()
     document.getElementById('history').style.color = 'black';
     document.getElementById('history').style.backgroundColor = 'lightgrey';
 }
-
 function history()
 {
-    document.getElementById('country').value = historyCountry;
     page = 'history';
-    document.getElementById('date1').style.visibility = 'visible';
-    document.getElementById('date2').style.visibility = 'visible';
-    document.getElementById('dash').style.visibility = 'visible';
+
     document.getElementById('overviewcontainer').style.visibility = 'hidden';
     document.getElementById('tablecontainer').style.visibility = 'visible'
     document.getElementById('chartcontainer').style.visibility = 'visible'
@@ -425,25 +387,7 @@ function history()
 
 function getData()
 {
-    if (page == 'history')
-    {
-        totalResults(new Date(document.getElementById('date1').value), new Date(document.getElementById('date2').value), document.getElementById('country').value);
-    }
-    else if (page == 'overview')
-    {
-        getCurrent();
-    }
-}
-
-function changeCountry()
-{
-    if (page == 'history')
-    {
-        countryChanged = true;
-        historyCountry = document.getElementById('country').value;
-    }
-    else if (page == 'overview')
-    {
-        overviewCountry = document.getElementById('country').value;
-    }
+    console.clear()
+    getHistory();
+    getCurrent();
 }

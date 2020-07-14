@@ -23,7 +23,7 @@ td
     height: 25px;
     white-space: nowrap;
     font-size: .8vw;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
 }
 
 #rawcontainer
@@ -37,7 +37,7 @@ td
 
 #loadingprogress
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     color: white;
     position: absolute;
     left: 50%;
@@ -56,7 +56,7 @@ td
     top: 52px;
     border: white;
     border-style: solid;
-    border-radius: 3px;
+    border-radius: 2px;
     overflow-y: scroll;
     visibility: hidden;
 }
@@ -70,9 +70,25 @@ td
     right: 6px;
     bottom: 6px;
     background: white;
-    border-radius: 3px;
+    border-radius: 2px;
     border-style: solid;
     border-color: white;
+}
+
+
+#graphcontainer
+{
+    visibility: hidden;
+    position: absolute;
+    top: 52px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    background: white;
+    border-radius: 2px;
+    border-style: solid;
+    border-color: white;
+    padding: 10px;
 }
 
 #selection
@@ -80,7 +96,7 @@ td
     background: white;
     border: white;
     border-style: solid;
-    border-radius: 3px;
+    border-radius: 2px;
     position: absolute;
     left: 6px;
     top: 6px;
@@ -100,7 +116,7 @@ td
     bottom: 6px;
     border: white;
     border-style: solid;
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 #country
@@ -115,8 +131,8 @@ td
     -moz-appearance: none;
     background: lightgrey;
     border-radius: 2px;
-    font-family: 'Montserrat', sans-serif;
-    padding-left: 4px;
+    font-family: 'Roboto Mono', monospace;
+    padding-left: 12px;
     width: 200px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -124,12 +140,12 @@ td
 
 #countrylabel
 {
-    background: dodgerblue;
+    background: #23395d;
     top: 1px;
     bottom: 1px;
     position: absolute;
     left: 1.5px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     color: white;
     border-radius: 2px;
     line-height: 28px;
@@ -145,7 +161,7 @@ td
 
 #dropdown
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     border: none;
 }
 
@@ -157,7 +173,7 @@ td
     bottom: 1px;
     border: none;
     background: lightgrey;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     border-radius: 2px;
     z-index: 100;
     visibility: hidden;
@@ -171,7 +187,7 @@ td
     bottom: 1px;
     border: none;
     background: lightgrey;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     border-radius: 2px;
     visibility: hidden;
 }
@@ -182,17 +198,17 @@ td
     border: none;
     top: 1px;
     bottom: 1px;
-    right: 200px;
-    background: dodgerblue;
+
+    background: #23395d;
     color: white;
     position: absolute;
-    right: 74px;
+    right: 147px;
     width: 70px;
     text-align: center;
     padding: 0px;
     border-radius: 2px;
     transition-duration: .25s;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
 }
 
 #history
@@ -209,7 +225,25 @@ td
     text-align: center;
     padding: 0px;
     transition-duration: .25s;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
+}
+
+#graphing
+{
+    top: 1px;
+    bottom: 1px;
+    border: none;
+    border-radius: 2px;
+    background: lightgrey;
+    color: black;
+    position: absolute;
+    right: 74px;
+    width: 70px;
+    text-align: center;
+    padding: 0px;
+    transition-duration: .25s;
+    font-family: 'Roboto Mono', monospace;
+
 }
 
 #dash
@@ -224,7 +258,7 @@ td
 
 #overviewCases
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 50%;
     top: 25%;
@@ -235,7 +269,7 @@ td
 
 #overviewCasesTitle
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 50%;
     top: calc(25% - 15px);
@@ -246,7 +280,7 @@ td
 
 #overviewNew
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 20%;
     top: calc(25% + 15px);
@@ -257,7 +291,7 @@ td
 
 #overviewNewTitle
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 20%;
     top: calc(25%);
@@ -267,7 +301,7 @@ td
 
 #overviewActive
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 80%;
     top: calc(25% + 15px);
@@ -278,7 +312,7 @@ td
 
 #overviewActiveTitle
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 80%;
     top: calc(25%);
@@ -288,7 +322,7 @@ td
 
 #overviewP1M
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 30%;
     top: 55%;
@@ -299,7 +333,7 @@ td
 
 #overviewP1MTitle
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 30%;
     top: calc(55% - 15px);
@@ -310,7 +344,7 @@ td
 
 #overviewRecover
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 60%;
     top: 55%;
@@ -321,7 +355,7 @@ td
 
 #overviewRecoverTitle
 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     position: absolute;
     left: 60%;
     top: calc(55% - 15px);
@@ -336,8 +370,14 @@ td
     left: 50%;
     top: 5%;
     transform: translate(-50%, -50%);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto Mono', monospace;
     font-size: 5vw;
     width: 100%;
     text-align: center;
+}
+
+.checkboxes
+{
+    font-family: 'Roboto Mono', monospace;
+    font-size: small;
 }

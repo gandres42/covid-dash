@@ -2,13 +2,18 @@
 <html lang="en" id="document">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="index.css">
     <link rel="shortcut icon" href="tablogo.png" type="image/x-icon"/>
     <title>Covid Dashboard</title>
 </head>
 <body>
+
     <div id="selection">
-        <div id="countrylabel">Country: </div>
-        <select id = "country" onchange="getData()"></select>
+        <div id="countrylabel">Country</div>
+        <select id="country" onchange="getData()"></select>
+        <select id="state" onchange="getData()">
+            <option value="usa" selected>Entire Country</option>
+        </select>
         <button id="graphing" onclick="graphing()">Graphing</button>
         <button id="overview" onclick="overview()">Overview</button>
         <button id="history" onclick="history()">History</button>
@@ -81,4 +86,4 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="index.js"></script>
-<link href="index.css" rel="stylesheet">
+

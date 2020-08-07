@@ -15,10 +15,7 @@ var ndeath;
 var recov;
 var multipass;
 
-//for use when determining what page is open
-var page = 'overview';
-
-//get list of countries for the dropdown menu
+//get list of countries and states for the country dropdown menu
 fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
     "method": "GET",
     "headers": {
@@ -27,20 +24,312 @@ fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
     }
 }).then(response => response.json()).then(json =>
 {
+    console.log(json.affected_countries);
     countries = json.affected_countries
     countries.sort()
     for (var i = 0; i < countries.length; i++)
     {
-        var x = document.getElementById("country");
+        var countrymenu = document.getElementById("country");
         var option = document.createElement("option");
         option.text = countries[i];
-        option.id = 'dropdown';
-        option.style.fontFamily = "'Montserrat', sans-serif";
-        x.add(option, x[x.length]);
+        countrymenu.appendChild(option);
     }
     document.getElementById('country').value = 'USA';
+
     getData()
-})
+    getStates()
+});
+
+
+function getStates() {
+    var states = [
+        {
+            "name":"Entire Country",
+            "abbreviation": "USA"
+        },
+        {
+            "name": "Alabama",
+            "abbreviation": "AL"
+        },
+        {
+            "name": "Alaska",
+            "abbreviation": "AK"
+        },
+        {
+            "name": "American Samoa",
+            "abbreviation": "AS"
+        },
+        {
+            "name": "Arizona",
+            "abbreviation": "AZ"
+        },
+        {
+            "name": "Arkansas",
+            "abbreviation": "AR"
+        },
+        {
+            "name": "California",
+            "abbreviation": "CA"
+        },
+        {
+            "name": "Colorado",
+            "abbreviation": "CO"
+        },
+        {
+            "name": "Connecticut",
+            "abbreviation": "CT"
+        },
+        {
+            "name": "Delaware",
+            "abbreviation": "DE"
+        },
+        {
+            "name": "District Of Columbia",
+            "abbreviation": "DC"
+        },
+        {
+            "name": "Federated States Of Micronesia",
+            "abbreviation": "FM"
+        },
+        {
+            "name": "Florida",
+            "abbreviation": "FL"
+        },
+        {
+            "name": "Georgia",
+            "abbreviation": "GA"
+        },
+        {
+            "name": "Guam",
+            "abbreviation": "GU"
+        },
+        {
+            "name": "Hawaii",
+            "abbreviation": "HI"
+        },
+        {
+            "name": "Idaho",
+            "abbreviation": "ID"
+        },
+        {
+            "name": "Illinois",
+            "abbreviation": "IL"
+        },
+        {
+            "name": "Indiana",
+            "abbreviation": "IN"
+        },
+        {
+            "name": "Iowa",
+            "abbreviation": "IA"
+        },
+        {
+            "name": "Kansas",
+            "abbreviation": "KS"
+        },
+        {
+            "name": "Kentucky",
+            "abbreviation": "KY"
+        },
+        {
+            "name": "Louisiana",
+            "abbreviation": "LA"
+        },
+        {
+            "name": "Maine",
+            "abbreviation": "ME"
+        },
+        {
+            "name": "Marshall Islands",
+            "abbreviation": "MH"
+        },
+        {
+            "name": "Maryland",
+            "abbreviation": "MD"
+        },
+        {
+            "name": "Massachusetts",
+            "abbreviation": "MA"
+        },
+        {
+            "name": "Michigan",
+            "abbreviation": "MI"
+        },
+        {
+            "name": "Minnesota",
+            "abbreviation": "MN"
+        },
+        {
+            "name": "Mississippi",
+            "abbreviation": "MS"
+        },
+        {
+            "name": "Missouri",
+            "abbreviation": "MO"
+        },
+        {
+            "name": "Montana",
+            "abbreviation": "MT"
+        },
+        {
+            "name": "Nebraska",
+            "abbreviation": "NE"
+        },
+        {
+            "name": "Nevada",
+            "abbreviation": "NV"
+        },
+        {
+            "name": "New Hampshire",
+            "abbreviation": "NH"
+        },
+        {
+            "name": "New Jersey",
+            "abbreviation": "NJ"
+        },
+        {
+            "name": "New Mexico",
+            "abbreviation": "NM"
+        },
+        {
+            "name": "New York",
+            "abbreviation": "NY"
+        },
+        {
+            "name": "North Carolina",
+            "abbreviation": "NC"
+        },
+        {
+            "name": "North Dakota",
+            "abbreviation": "ND"
+        },
+        {
+            "name": "Northern Mariana Islands",
+            "abbreviation": "MP"
+        },
+        {
+            "name": "Ohio",
+            "abbreviation": "OH"
+        },
+        {
+            "name": "Oklahoma",
+            "abbreviation": "OK"
+        },
+        {
+            "name": "Oregon",
+            "abbreviation": "OR"
+        },
+        {
+            "name": "Palau",
+            "abbreviation": "PW"
+        },
+        {
+            "name": "Pennsylvania",
+            "abbreviation": "PA"
+        },
+        {
+            "name": "Puerto Rico",
+            "abbreviation": "PR"
+        },
+        {
+            "name": "Rhode Island",
+            "abbreviation": "RI"
+        },
+        {
+            "name": "South Carolina",
+            "abbreviation": "SC"
+        },
+        {
+            "name": "South Dakota",
+            "abbreviation": "SD"
+        },
+        {
+            "name": "Tennessee",
+            "abbreviation": "TN"
+        },
+        {
+            "name": "Texas",
+            "abbreviation": "TX"
+        },
+        {
+            "name": "Utah",
+            "abbreviation": "UT"
+        },
+        {
+            "name": "Vermont",
+            "abbreviation": "VT"
+        },
+        {
+            "name": "Virgin Islands",
+            "abbreviation": "VI"
+        },
+        {
+            "name": "Virginia",
+            "abbreviation": "VA"
+        },
+        {
+            "name": "Washington",
+            "abbreviation": "WA"
+        },
+        {
+            "name": "West Virginia",
+            "abbreviation": "WV"
+        },
+        {
+            "name": "Wisconsin",
+            "abbreviation": "WI"
+        },
+        {
+            "name": "Wyoming",
+            "abbreviation": "WY"
+        }
+    ]
+    for (var i = 0; i < states.length; i++)
+    {
+        var s = document.getElementById('state')
+
+        var opt = document.createElement('option')
+        // create text node to add to option element (opt)
+        opt.text = states[i].name;
+
+        // set value property of opt
+        opt.value = states[i].abbreviation.toLowerCase();
+
+        // add opt to end of select box (sel)
+        s.appendChild(opt);
+    }
+
+}
+
+
+
+
+//Gets state data when chosen and passes data to appropriate methods
+function getState()
+{
+    data.length = 0;
+    fetch('https://covidtracking.com/api/v1/states/' + document.getElementById('country').value.toLowerCase() + '/daily.json').then(response => response.json()).then(json => {
+
+        data.length = 0;
+        for (var i = (json.length - 1); i > 0; i--)
+        {
+            data.push({
+                total_cases: String(json[i].positive),
+                total_deaths:  String(json[i].death),
+                active_cases: String(json[i].inIcuCumulative),
+                new_cases: String(json[i].positiveIncrease),
+                new_deaths: String(json[i].deathIncrease),
+                total_recovered: 'null',
+                record_date: json[i].date.toString()
+            });
+        }
+        console.log('all historical data for state');
+        console.log(data)
+        fillTable();
+        createCharts();
+        Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
+    })
+}
 
 //raw function to get current results, gets latest stats and fills relevant headers with data
 function getCurrent()
@@ -73,28 +362,67 @@ function getCurrent()
 //get all past history on the country currently selected excluding current date, fills the data array, then calls charts and tables on completion
 function getHistory()
 {
-    data.length = 0;
-    fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
-        "method": "GET",
-        "headers": {
-            "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
-            "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
-        }
-    }).then(response => response.json()).then(json => {
-
-        for (var i = (json.stat_by_country.length - 1); i > 0; i--)
+    console.log(document.getElementById('country').value)
+    console.log(document.getElementById('state').value)
+    if (document.getElementById('country').value == 'USA')
+    {
+        document.getElementById('state').style.visibility = 'visible';
+        if (document.getElementById('state').value == 'USA')
         {
-           if (json.stat_by_country[i].record_date.substr(0, 10) !== json.stat_by_country[i - 1].record_date.substr(0, 10))
-           {
-               data.push(json.stat_by_country[i])
-           }
+            data.length = 0;
+            fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+                    "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
+                }
+            }).then(response => response.json()).then(json => {
+
+                for (var i = (json.stat_by_country.length - 1); i > 0; i--)
+                {
+                    if (json.stat_by_country[i].record_date.substr(0, 10) !== json.stat_by_country[i - 1].record_date.substr(0, 10))
+                    {
+                        data.push(json.stat_by_country[i])
+                    }
+                }
+                console.log('all historical data for country');
+                console.log(data)
+                fillTable();
+                createCharts();
+                Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
+            })
         }
-        console.log('all historical data for country');
-        console.log(data)
-        fillTable();
-        createCharts();
-        Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
-    })
+        else
+        {
+            getState();
+        }
+    }
+    else
+    {
+        document.getElementById('state').style.visibility = 'hidden';
+        data.length = 0;
+        fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+                "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
+            }
+        }).then(response => response.json()).then(json => {
+
+            for (var i = (json.stat_by_country.length - 1); i > 0; i--)
+            {
+                if (json.stat_by_country[i].record_date.substr(0, 10) !== json.stat_by_country[i - 1].record_date.substr(0, 10))
+                {
+                    data.push(json.stat_by_country[i])
+                }
+            }
+            console.log('all historical data for country');
+            console.log(data)
+            fillTable();
+            createCharts();
+            Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
+        })
+    }
 }
 
 //clears table then populates with contents of data array

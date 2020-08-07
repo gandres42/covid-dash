@@ -1,6 +1,6 @@
 #document
 {
-    background: #26334c;
+    background: #285075;
 }
 
 table, th {
@@ -105,8 +105,7 @@ td
 }
 
 
-#tablecontainer
-{
+#tablecontainer {
     visibility: hidden;
     background: white;
     position: absolute;
@@ -117,46 +116,6 @@ td
     border: white;
     border-style: solid;
     border-radius: 2px;
-}
-
-#country
-{
-    position: absolute;
-    left: 63.5px;
-    top: 1px;
-    bottom: 1px;
-    border: none;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: lightgrey;
-    border-radius: 2px;
-    font-family: 'Roboto Mono', monospace;
-    padding-left: 12px;
-    width: 200px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-}
-
-#countrylabel
-{
-    background: #23395d;
-    top: 1px;
-    bottom: 1px;
-    position: absolute;
-    left: 1.5px;
-    font-family: 'Roboto Mono', monospace;
-    color: white;
-    border-radius: 2px;
-    line-height: 28px;
-    font-size: small;
-    padding: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
-    z-index: 10;
-    text-align: center;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
 }
 
 #dropdown
@@ -198,7 +157,6 @@ td
     border: none;
     top: 1px;
     bottom: 1px;
-
     background: #23395d;
     color: white;
     position: absolute;
@@ -380,4 +338,51 @@ td
 {
     font-family: 'Roboto Mono', monospace;
     font-size: small;
+}
+
+#countrylabel
+{
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    bottom: 1px;
+    background: #23395d;
+    text-align: center;
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    padding: 1px;
+    line-height: 27px;
+    font-size: 15px;
+    width: 70px;
+    z-index: 10;
+}
+
+#country
+{
+    position: absolute;
+    left: 73px;
+    border-style: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    top: 1px;
+    bottom: 1px;
+    background: lightgrey;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+
+
+}
+
+#state
+{
+    visibility: hidden;
+    position: absolute;
+    left: 243px;
+    border-style: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    top: 1px;
+    bottom: 1px;
+    background: lightgrey;
+    border-radius: 1px;
 }

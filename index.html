@@ -11,7 +11,9 @@
     <div id="selection">
         <div id="countrylabel">Country</div>
         <select id="country" onchange="getData()"></select>
-        <select id="state" onchange="getData()"></select>
+        <select id="state" onchange="getData()">
+            <option value="usa" selected>Entire Country</option>
+        </select>
         <button id="graphing" onclick="graphing()">Graphing</button>
         <button id="overview" onclick="overview()">Overview</button>
         <button id="history" onclick="history()">History</button>

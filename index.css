@@ -352,7 +352,7 @@ td
     font-family: 'Roboto Mono', monospace;
     padding: 1px;
     line-height: 27px;
-    font-size: 15px;
+    font-size: 10px;
     width: 70px;
     z-index: 10;
 }
@@ -377,7 +377,7 @@ td
 {
     visibility: hidden;
     position: absolute;
-    left: 243px;
+    left: 225px;
     border-style: none;
     -webkit-appearance: none;
     -moz-appearance: none;

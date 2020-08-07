@@ -44,10 +44,6 @@ fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
 function getStates() {
     var states = [
         {
-            "name":"Entire Country",
-            "abbreviation": "USA"
-        },
-        {
             "name": "Alabama",
             "abbreviation": "AL"
         },
@@ -298,7 +294,6 @@ function getStates() {
         // add opt to end of select box (sel)
         s.appendChild(opt);
     }
-
 }
 
 
@@ -308,7 +303,7 @@ function getStates() {
 function getState()
 {
     data.length = 0;
-    fetch('https://covidtracking.com/api/v1/states/' + document.getElementById('country').value.toLowerCase() + '/daily.json').then(response => response.json()).then(json => {
+    fetch('https://covidtracking.com/api/v1/states/' + document.getElementById('state').value.toLowerCase() + '/daily.json').then(response => response.json()).then(json => {
 
         data.length = 0;
         for (var i = (json.length - 1); i > 0; i--)
@@ -367,7 +362,7 @@ function getHistory()
     if (document.getElementById('country').value == 'USA')
     {
         document.getElementById('state').style.visibility = 'visible';
-        if (document.getElementById('state').value == 'USA')
+        if (document.getElementById('state').value == 'usa')
         {
             data.length = 0;
             fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
@@ -392,7 +387,7 @@ function getHistory()
                 Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
             })
         }
-        else
+        else if (document.getElementById('state').value !== 'usa')
         {
             getState();
         }

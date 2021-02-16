@@ -37,11 +37,14 @@ fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
     document.getElementById('country').value = 'USA';
 
     getData()
-    getStates()
+    //getStates()
 });
 
+document.getElementById("titlebar").style.width = "calc(100% - "  + getScrollBarWidth() + "px)";
 
-function getStates() {
+
+
+/*function getStates() {
     var states = [
         {
             "name": "Alabama",
@@ -294,13 +297,13 @@ function getStates() {
         // add opt to end of select box (sel)
         s.appendChild(opt);
     }
-}
+}*/
 
 
 
 
 //Gets state data when chosen and passes data to appropriate methods
-function getState()
+/*function getState()
 {
     data.length = 0;
     fetch('https://covidtracking.com/api/v1/states/' + document.getElementById('state').value.toLowerCase() + '/daily.json').then(response => response.json()).then(json => {
@@ -324,7 +327,7 @@ function getState()
         createCharts();
         Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
     })
-}
+}*/
 
 //raw function to get current results, gets latest stats and fills relevant headers with data
 function getCurrent()
@@ -358,11 +361,11 @@ function getCurrent()
 function getHistory()
 {
     console.log(document.getElementById('country').value)
-    console.log(document.getElementById('state').value)
+    //console.log(document.getElementById('state').value)
     if (document.getElementById('country').value == 'USA')
     {
-        document.getElementById('state').style.visibility = 'visible';
-        if (document.getElementById('state').value == 'usa')
+        //document.getElementById('state').style.visibility = 'visible';
+        if (true) //left in case state stats are made available again
         {
             data.length = 0;
             fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
@@ -387,14 +390,14 @@ function getHistory()
                 Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
             })
         }
-        else if (document.getElementById('state').value !== 'usa')
+        /*else if (document.getElementById('state').value !== 'usa')
         {
             getState();
-        }
+        }*/
     }
     else
     {
-        document.getElementById('state').style.visibility = 'hidden';
+        //document.getElementById('state').style.visibility = 'hidden';
         data.length = 0;
         fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
             "method": "GET",
@@ -879,3 +882,29 @@ function Multigraph(tcase, ncase, tdeath, ndeath, recover, activec)
         }
     });
 }
+
+function getScrollBarWidth () {
+    var inner = document.createElement('p');
+    inner.style.width = "100%";
+    inner.style.height = "200px";
+
+    var outer = document.createElement('div');
+    outer.style.position = "absolute";
+    outer.style.top = "0px";
+    outer.style.left = "0px";
+    outer.style.visibility = "hidden";
+    outer.style.width = "200px";
+    outer.style.height = "150px";
+    outer.style.overflow = "hidden";
+    outer.appendChild (inner);
+
+    document.body.appendChild (outer);
+    var w1 = inner.offsetWidth;
+    outer.style.overflow = 'scroll';
+    var w2 = inner.offsetWidth;
+    if (w1 == w2) w2 = outer.clientWidth;
+
+    document.body.removeChild (outer);
+
+    return (w1 - w2);
+};

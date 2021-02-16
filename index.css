@@ -19,7 +19,6 @@ td
 #titlebar
 {
     background: white;
-    width: calc(100% - 17px);
     height: 25px;
     white-space: nowrap;
     font-size: .8vw;

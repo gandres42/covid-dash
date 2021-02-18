@@ -1,6 +1,13 @@
 #document
 {
-    background: #285075;
+    background: #23395d;
+    height: 100%;
+}
+
+body
+{
+    height: 100%;
+    overflow: hidden;
 }
 
 table, th {
@@ -22,7 +29,7 @@ td
     height: 25px;
     white-space: nowrap;
     font-size: .8vw;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Anonymous pro', monospace;
 }
 
 #rawcontainer
@@ -72,6 +79,7 @@ td
     border-radius: 2px;
     border-style: solid;
     border-color: white;
+    text-align: center;
 }
 
 
@@ -216,117 +224,56 @@ td
 #overviewCases
 {
     font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    font-size: 7vw;
+    font-size: 10vw;
     text-align: center;
+    margin: 0;
+    margin-bottom: 20px;
 }
 
 #overviewCasesTitle
 {
     font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 50%;
-    top: calc(25% - 15px);
-    transform: translate(-50%, -50%);
     font-size: 2vw;
     text-align: center;
+    margin: 0;
 }
 
 #overviewNew
 {
     font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 20%;
-    top: calc(25% + 15px);
-    transform: translate(-50%, -50%);
-    font-size: 3vw;
+    font-size: 7vw;
     text-align: center;
+    margin: 0;
+    margin-bottom: 20px;
 }
 
 #overviewNewTitle
 {
     font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 20%;
-    top: calc(25%);
-    transform: translate(-50%, -50%);
-    font-size: 1.25vw;
-}
-
-#overviewActive
-{
-    font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 80%;
-    top: calc(25% + 15px);
-    transform: translate(-50%, -50%);
-    font-size: 3vw;
     text-align: center;
+    font-size: 2vw;
+    margin: 0;
 }
 
-#overviewActiveTitle
+#overviewDeath
 {
     font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 80%;
-    top: calc(25%);
-    transform: translate(-50%, -50%);
-    font-size: 1.25vw;
-}
-
-#overviewP1M
-{
-    font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 30%;
-    top: 55%;
-    transform: translate(-50%, -50%);
-    font-size: 3vw;
+    font-size: 7vw;
     text-align: center;
+    margin: 0;
+    margin-bottom: 20px;
 }
 
-#overviewP1MTitle
+#overviewDeathTitle
 {
     font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 30%;
-    top: calc(55% - 15px);
-    transform: translate(-50%, -50%);
-    font-size: 1.25vw;
+    font-size: 2vw;
     text-align: center;
-}
-
-#overviewRecover
-{
-    font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 60%;
-    top: 55%;
-    transform: translate(-50%, -50%);
-    font-size: 3vw;
-    text-align: center;
-}
-
-#overviewRecoverTitle
-{
-    font-family: 'Roboto Mono', monospace;
-    position: absolute;
-    left: 60%;
-    top: calc(55% - 15px);
-    transform: translate(-50%, -50%);
-    font-size: 1.25vw;
-    text-align: center;
+    margin: 0;
 }
 
 #overviewTitle
 {
-    position: absolute;
-    left: 50%;
-    top: 5%;
-    transform: translate(-50%, -50%);
     font-family: 'Roboto Mono', monospace;
     font-size: 5vw;
     width: 100%;
@@ -350,10 +297,10 @@ td
     color: white;
     font-family: 'Roboto Mono', monospace;
     padding: 1px;
-    line-height: 27px;
     font-size: 10px;
     width: 70px;
     z-index: 10;
+    line-height: 30px;
 }
 
 #country
@@ -368,8 +315,7 @@ td
     background: lightgrey;
     border-top-right-radius: 1px;
     border-bottom-right-radius: 1px;
-
-
+    width: 200px;
 }
 
 #state
@@ -384,4 +330,9 @@ td
     bottom: 1px;
     background: lightgrey;
     border-radius: 1px;
+}
+#suboverviewcontainer
+{
+    display: inline-block;
+    width: auto;
 }

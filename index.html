@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 <html lang="en" id="document">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +8,7 @@
     <link rel="shortcut icon" href="tablogo.png" type="image/x-icon"/>
     <title>Covid Dashboard</title>
 </head>
-<body>
+<body scroll="no">
 
     <div id="selection">
         <div id="countrylabel">Country</div>
@@ -43,20 +45,21 @@
     <div id="overviewcontainer">
         <h1 id="overviewTitle">Current Statistics of USA </h1>
 
-        <h2 id="overviewNewTitle">New Cases Today:</h2>
-        <h2 id="overviewNew">loading</h2>
-
         <h1 id="overviewCasesTitle">Total Cases:</h1>
         <h1 id="overviewCases">loading</h1>
 
-        <h2 id="overviewActiveTitle">Active Cases:</h2>
-        <h2 id="overviewActive">loading</h2>
+        <div id="suboverviewcontainer" style="margin-top: 5vh">
+            <div style="display: inline-block; text-align: center; float: left; margin-right: 50px">
+                <h2 id="overviewNewTitle">New Cases Today:</h2>
+                <h2 id="overviewNew">loading</h2>
+            </div>
 
-        <h2 id="overviewP1MTitle">Cases per Million:</h2>
-        <h2 id="overviewP1M">loading</h2>
+            <div style="display: inline-block; text-align: center; float: right; margin-left: 50px">
+                <h2 id="overviewDeathTitle">Total Deaths:</h2>
+                <h2 id="overviewDeath">loading</h2>
+            </div>
+        </div>
 
-        <h2 id="overviewRecoverTitle">Recovered:</h2>
-        <h2 id="overviewRecover">loading</h2>
     </div>
 
     <div id="graphcontainer">
@@ -79,8 +82,6 @@
 </body>
 </html>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="index.js"></script>
 

@@ -350,9 +350,7 @@ function getCurrent()
         {
             document.getElementById('overviewNew').innerHTML = json.latest_stat_by_country[0].new_cases;
         }
-        document.getElementById('overviewActive').innerHTML = json.latest_stat_by_country[0].active_cases;
-        document.getElementById('overviewP1M').innerHTML = json.latest_stat_by_country[0].total_cases_per1m;
-        document.getElementById('overviewRecover').innerHTML = json.latest_stat_by_country[0].total_recovered;
+        document.getElementById('overviewDeath').innerHTML = json.latest_stat_by_country[0].total_deaths;
         document.getElementById('overviewTitle').innerHTML = 'Current Statistics of ' + document.getElementById('country').value
     })
 }

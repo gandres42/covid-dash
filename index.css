@@ -65,6 +65,7 @@ td
     border-radius: 2px;
     overflow-y: scroll;
     visibility: hidden;
+    padding: 20px;
 }
 
 #overviewcontainer
@@ -167,7 +168,7 @@ td
     background: #23395d;
     color: white;
     position: absolute;
-    right: 147px;
+    right: 75px;
     width: 70px;
     text-align: center;
     padding: 0px;
@@ -335,4 +336,9 @@ td
 {
     display: inline-block;
     width: auto;
+}
+
+.history_graph
+{
+
 }

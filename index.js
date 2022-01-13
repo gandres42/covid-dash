@@ -299,9 +299,6 @@ document.getElementById("titlebar").style.width = "calc(100% - "  + getScrollBar
     }
 }*/
 
-
-
-
 //Gets state data when chosen and passes data to appropriate methods
 /*function getState()
 {
@@ -356,69 +353,17 @@ function getCurrent()
 }
 
 //get all past history on the country currently selected excluding current date, fills the data array, then calls charts and tables on completion
-function getHistory()
+function getHistory(country)
 {
-    console.log(document.getElementById('country').value)
-    //console.log(document.getElementById('state').value)
-    if (document.getElementById('country').value == 'USA')
-    {
-        //document.getElementById('state').style.visibility = 'visible';
-        if (true) //left in case state stats are made available again
-        {
-            data.length = 0;
-            fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
-                "method": "GET",
-                "headers": {
-                    "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
-                    "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
-                }
-            }).then(response => response.json()).then(json => {
-
-                for (var i = (json.stat_by_country.length - 1); i > 0; i--)
-                {
-                    if (json.stat_by_country[i].record_date.substr(0, 10) !== json.stat_by_country[i - 1].record_date.substr(0, 10))
-                    {
-                        data.push(json.stat_by_country[i])
-                    }
-                }
-                console.log('all historical data for country');
-                console.log(data)
-                fillTable();
-                createCharts();
-                Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
-            })
-        }
-        /*else if (document.getElementById('state').value !== 'usa')
-        {
-            getState();
-        }*/
-    }
-    else
-    {
-        //document.getElementById('state').style.visibility = 'hidden';
-        data.length = 0;
-        fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_particular_country.php?country=" + document.getElementById('country').value, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
-                "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
-            }
-        }).then(response => response.json()).then(json => {
-
-            for (var i = (json.stat_by_country.length - 1); i > 0; i--)
-            {
-                if (json.stat_by_country[i].record_date.substr(0, 10) !== json.stat_by_country[i - 1].record_date.substr(0, 10))
-                {
-                    data.push(json.stat_by_country[i])
-                }
-            }
-            console.log('all historical data for country');
-            console.log(data)
-            fillTable();
-            createCharts();
-            Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
-        })
-    }
+    data.length = 0;
+    fetch("https://corona.lmao.ninja/v2/historical/" + document.getElementById('country').value + "?lastdays=30", {
+        "method": "GET"
+    }).then(response => response.json()).then(json => {
+        console.log(json)
+        fillTable();
+        createCharts();
+        Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked);
+    })
 }
 
 //clears table then populates with contents of data array
@@ -715,26 +660,6 @@ function graphing()
     document.getElementById('graphing').style.color = 'white';
     document.getElementById('graphing').style.backgroundColor = '#23395d';
 
-}
-
-//here as futureproofing for caching value so it can check if data is already stored or not.
-function getData()
-{
-    getCurrent();
-    getHistory();
-
-    //possibly used for cacheing values in the future to reduce network traffic
-    /*if (cache.hasOwnProperty(document.getElementById('country').value))
-    {
-        console.log(cache[document.getElementById('country').value])
-        data = cache[document.getElementById('country').value]
-        fillTable();
-        createCharts();
-    }
-    else
-    {
-        getHistory();
-    }*/
 }
 
 function Multigraph(tcase, ncase, tdeath, ndeath, recover, activec)

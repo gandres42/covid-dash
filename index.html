@@ -12,8 +12,8 @@
 
     <div id="selection">
         <div id="countrylabel">Country</div>
-        <select id="country" onchange="getData()"></select>
-        <button id="graphing" onclick="graphing()">Graphing</button>
+        <select id="country" onchange="chartDestruction(); getHistory(); getCurrent();"></select>
+<!--        <button id="graphing" onclick="graphing()">Graphing</button>-->
         <button id="overview" onclick="overview()">Overview</button>
         <button id="history" onclick="history()">History</button>
     </div>
@@ -26,7 +26,6 @@
                 <th>New Cases</th>
                 <th>Total Death</th>
                 <th>New Deaths</th>
-                <th>Recovered</th>
             </tr>
         </table>
         <div id="rawcontainer">
@@ -35,11 +34,10 @@
     </div>
 
     <div id="chartcontainer">
-        <canvas id="totalCases"></canvas>
-        <canvas id="newCases"></canvas>
-        <canvas id="totalDeaths"></canvas>
-        <canvas id="newDeaths"></canvas>
-        <canvas id="recovered"></canvas>
+        <canvas class="history_graph" id="totalCases"></canvas>
+        <canvas class="history_graph" id="newCases"></canvas>
+        <canvas class="history_graph" id="totalDeaths"></canvas>
+        <canvas class="history_graph" id="newDeaths"></canvas>
     </div>
 
     <div id="overviewcontainer">
@@ -63,17 +61,17 @@
     </div>
 
     <div id="graphcontainer">
-        <input type="checkbox" id="tccheck" onchange="Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
+        <input type="checkbox" id="tccheck" onchange="multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
         <label for="tccheck" class="checkboxes">Total Cases</label>
-        <input type="checkbox" id="nccheck" onchange="Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
+        <input type="checkbox" id="nccheck" onchange="multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
         <label for="nccheck" class="checkboxes">New Cases</label>
-        <input type="checkbox" id="tdcheck" onchange="Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
+        <input type="checkbox" id="tdcheck" onchange="multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
         <label for="tdcheck" class="checkboxes">Total Deaths</label>
-        <input type="checkbox" id="ndcheck" onchange="Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
+        <input type="checkbox" id="ndcheck" onchange="multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
         <label for="ndcheck" class="checkboxes">New Deaths</label>
-        <input type="checkbox" id="trcheck" onchange="Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
+        <input type="checkbox" id="trcheck" onchange="multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
         <label for="trcheck" class="checkboxes">Total Recovered</label>
-        <input type="checkbox" id="accheck" onchange="Multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
+        <input type="checkbox" id="accheck" onchange="multigraph(document.getElementById('tccheck').checked, document.getElementById('nccheck').checked, document.getElementById('tdcheck').checked, document.getElementById('ndcheck').checked, document.getElementById('trcheck').checked, document.getElementById('accheck').checked);">
         <label for="accheck" class="checkboxes">Active Cases</label>
         <canvas id="multigraph"></canvas>
     </div>
@@ -81,7 +79,591 @@
 
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+    //overall data to be filled by history call
+    let dates = [];
+    let total_cases = [];
+    let new_cases = [];
+    let total_deaths = [];
+    let new_deaths = [];
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-<script src="index.js"></script>
+    //charts
+    let total_cases_chart = null;
+    let new_cases_chart = null;
+    let total_deaths_chart = null;
+    let new_deaths_chart = null;
+
+    //list ouf countries for the dropdown menu
+    let countries;
+
+    //graphs store location for clearancea after each use
+
+    //get list of countries and states for the country dropdown menu
+    fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php", {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+            "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
+        }
+    }).then(response => response.json()).then(json =>
+    {
+        console.log(json.affected_countries);
+        countries = json.affected_countries
+        countries.sort()
+        for (var i = 0; i < countries.length; i++)
+        {
+            var countrymenu = document.getElementById("country");
+            var option = document.createElement("option");
+            option.text = countries[i];
+            countrymenu.appendChild(option);
+        }
+        document.getElementById('country').value = 'USA';
+
+        getCurrent();
+        getHistory();
+    });
+
+    document.getElementById("titlebar").style.width = "calc(100% - "  + getScrollBarWidth() + "px)";
+
+    /*function getStates() {
+        var states = [
+            {
+                "name": "Alabama",
+                "abbreviation": "AL"
+            },
+            {
+                "name": "Alaska",
+                "abbreviation": "AK"
+            },
+            {
+                "name": "American Samoa",
+                "abbreviation": "AS"
+            },
+            {
+                "name": "Arizona",
+                "abbreviation": "AZ"
+            },
+            {
+                "name": "Arkansas",
+                "abbreviation": "AR"
+            },
+            {
+                "name": "California",
+                "abbreviation": "CA"
+            },
+            {
+                "name": "Colorado",
+                "abbreviation": "CO"
+            },
+            {
+                "name": "Connecticut",
+                "abbreviation": "CT"
+            },
+            {
+                "name": "Delaware",
+                "abbreviation": "DE"
+            },
+            {
+                "name": "District Of Columbia",
+                "abbreviation": "DC"
+            },
+            {
+                "name": "Federated States Of Micronesia",
+                "abbreviation": "FM"
+            },
+            {
+                "name": "Florida",
+                "abbreviation": "FL"
+            },
+            {
+                "name": "Georgia",
+                "abbreviation": "GA"
+            },
+            {
+                "name": "Guam",
+                "abbreviation": "GU"
+            },
+            {
+                "name": "Hawaii",
+                "abbreviation": "HI"
+            },
+            {
+                "name": "Idaho",
+                "abbreviation": "ID"
+            },
+            {
+                "name": "Illinois",
+                "abbreviation": "IL"
+            },
+            {
+                "name": "Indiana",
+                "abbreviation": "IN"
+            },
+            {
+                "name": "Iowa",
+                "abbreviation": "IA"
+            },
+            {
+                "name": "Kansas",
+                "abbreviation": "KS"
+            },
+            {
+                "name": "Kentucky",
+                "abbreviation": "KY"
+            },
+            {
+                "name": "Louisiana",
+                "abbreviation": "LA"
+            },
+            {
+                "name": "Maine",
+                "abbreviation": "ME"
+            },
+            {
+                "name": "Marshall Islands",
+                "abbreviation": "MH"
+            },
+            {
+                "name": "Maryland",
+                "abbreviation": "MD"
+            },
+            {
+                "name": "Massachusetts",
+                "abbreviation": "MA"
+            },
+            {
+                "name": "Michigan",
+                "abbreviation": "MI"
+            },
+            {
+                "name": "Minnesota",
+                "abbreviation": "MN"
+            },
+            {
+                "name": "Mississippi",
+                "abbreviation": "MS"
+            },
+            {
+                "name": "Missouri",
+                "abbreviation": "MO"
+            },
+            {
+                "name": "Montana",
+                "abbreviation": "MT"
+            },
+            {
+                "name": "Nebraska",
+                "abbreviation": "NE"
+            },
+            {
+                "name": "Nevada",
+                "abbreviation": "NV"
+            },
+            {
+                "name": "New Hampshire",
+                "abbreviation": "NH"
+            },
+            {
+                "name": "New Jersey",
+                "abbreviation": "NJ"
+            },
+            {
+                "name": "New Mexico",
+                "abbreviation": "NM"
+            },
+            {
+                "name": "New York",
+                "abbreviation": "NY"
+            },
+            {
+                "name": "North Carolina",
+                "abbreviation": "NC"
+            },
+            {
+                "name": "North Dakota",
+                "abbreviation": "ND"
+            },
+            {
+                "name": "Northern Mariana Islands",
+                "abbreviation": "MP"
+            },
+            {
+                "name": "Ohio",
+                "abbreviation": "OH"
+            },
+            {
+                "name": "Oklahoma",
+                "abbreviation": "OK"
+            },
+            {
+                "name": "Oregon",
+                "abbreviation": "OR"
+            },
+            {
+                "name": "Palau",
+                "abbreviation": "PW"
+            },
+            {
+                "name": "Pennsylvania",
+                "abbreviation": "PA"
+            },
+            {
+                "name": "Puerto Rico",
+                "abbreviation": "PR"
+            },
+            {
+                "name": "Rhode Island",
+                "abbreviation": "RI"
+            },
+            {
+                "name": "South Carolina",
+                "abbreviation": "SC"
+            },
+            {
+                "name": "South Dakota",
+                "abbreviation": "SD"
+            },
+            {
+                "name": "Tennessee",
+                "abbreviation": "TN"
+            },
+            {
+                "name": "Texas",
+                "abbreviation": "TX"
+            },
+            {
+                "name": "Utah",
+                "abbreviation": "UT"
+            },
+            {
+                "name": "Vermont",
+                "abbreviation": "VT"
+            },
+            {
+                "name": "Virgin Islands",
+                "abbreviation": "VI"
+            },
+            {
+                "name": "Virginia",
+                "abbreviation": "VA"
+            },
+            {
+                "name": "Washington",
+                "abbreviation": "WA"
+            },
+            {
+                "name": "West Virginia",
+                "abbreviation": "WV"
+            },
+            {
+                "name": "Wisconsin",
+                "abbreviation": "WI"
+            },
+            {
+                "name": "Wyoming",
+                "abbreviation": "WY"
+            }
+        ]
+        for (var i = 0; i < states.length; i++)
+        {
+            var s = document.getElementById('state')
+
+            var opt = document.createElement('option')
+            // create text node to add to option element (opt)
+            opt.text = states[i].name;
+
+            // set value property of opt
+            opt.value = states[i].abbreviation.toLowerCase();
+
+            // add opt to end of select box (sel)
+            s.appendChild(opt);
+        }
+    }*/
+
+    //raw function to get current results, gets latest stats and fills relevant headers with data
+    function getCurrent()
+    {
+        fetch("https://coronavirus-monitor.p.rapidapi.com/coronavirus/latest_stat_by_country.php?country=" + document.getElementById('country').value, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "coronavirus-monitor.p.rapidapi.com",
+                "x-rapidapi-key": "6c9f272afdmsh12c0f638d9d580dp172cbbjsn64f858938aa0"
+            }
+        }).then(response => response.json()).then(json => {
+            console.log('current data for country');
+            console.log(json);
+            document.getElementById('overviewCases').innerHTML = json.latest_stat_by_country[0].total_cases;
+            if (json.latest_stat_by_country[0].new_cases == "")
+            {
+                document.getElementById('overviewNew').innerHTML = '0';
+            }
+            else
+            {
+                document.getElementById('overviewNew').innerHTML = json.latest_stat_by_country[0].new_cases;
+            }
+            document.getElementById('overviewDeath').innerHTML = json.latest_stat_by_country[0].total_deaths;
+            document.getElementById('overviewTitle').innerHTML = 'Current Statistics of ' + document.getElementById('country').value
+        })
+    }
+
+    //get all past history on the country currently selected excluding current date, fills the data array, then calls charts and tables on completion
+    function getHistory()
+    {
+        $.get("https://corona.lmao.ninja/v2/historical/" + document.getElementById('country').value + "?lastdays=all", function(data, status){
+            dates.length = 0;
+            total_cases.length = 0;
+            total_deaths.length = 0;
+            new_cases.length = 0;
+            new_deaths.length = 0;
+            dates = Object.keys(data.timeline.cases);
+            total_cases = Object.values(data.timeline.cases);
+            total_deaths = Object.values(data.timeline.deaths);
+            for (let i = 1; i < dates.length; i++)
+            {
+                new_cases[i] = total_cases[i] - total_cases[i - 1];
+                new_deaths[i] = total_deaths[i] - total_deaths[i - 1];
+            }
+            fillTable();
+            fillGraphs();
+        });
+    }
+
+    function fillGraphs()
+    {
+        total_cases_chart = new Chart(document.getElementById('totalCases').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Total Cases',
+                    data: total_cases,
+                    backgroundColor: [
+                        'rgba(110,110,110,0.3)',
+                    ],
+                    borderColor: [
+                        'rgb(255,0,0)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                pointRadius: 0,
+                fill: true,
+                lineBorderWidth: 3
+            }
+        });
+        new_cases_chart = new Chart(document.getElementById('newCases').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'New Cases',
+                    data: new_cases,
+                    backgroundColor: [
+                        'rgba(110,110,110,0.3)',
+                    ],
+                    borderColor: [
+                        'rgb(255,145,0)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                pointRadius: 0,
+                fill: true,
+                lineBorderWidth: 3
+            }
+        });
+        total_deaths_chart = new Chart(document.getElementById('totalDeaths').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Total Deaths',
+                    data: total_deaths,
+                    backgroundColor: [
+                        'rgba(110,110,110,0.3)',
+                    ],
+                    borderColor: [
+                        'rgb(28,28,28)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                pointRadius: 0,
+                fill: true,
+                lineBorderWidth: 3
+            }
+        });
+        new_deaths_chart = new Chart(document.getElementById('newDeaths').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'New Deaths',
+                    data: new_deaths,
+                    backgroundColor: [
+                        'rgba(110,110,110,0.3)',
+                    ],
+                    borderColor: [
+                        'rgb(0,32,80)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                pointRadius: 0,
+                fill: true,
+                lineBorderWidth: 3
+            }
+        });
+    }
+
+    //clears table then populates with contents of data array
+    function fillTable()
+    {
+        for (let i = 0; i < dates.length; i++)
+        {
+            let table = document.getElementById('rawvals')
+            let row = table.insertRow(0);
+            let cell0 = row.insertCell(0);
+            let cell1 = row.insertCell(1);
+            let cell2 = row.insertCell(2);
+            let cell3 = row.insertCell(3);
+            let cell4 = row.insertCell(4);
+
+            cell0.innerHTML = dates[i];
+            cell1.innerHTML = total_cases[i];
+            cell2.innerHTML = new_cases[i];
+            cell3.innerHTML = total_deaths[i];
+            cell4.innerHTML = new_deaths[i];
+
+            cell0.style.fontFamily = 'Roboto Mono';
+            cell0.style.textAlign = 'center';
+            cell0.style.fontSize = '1vw';
+
+            cell1.style.fontFamily = 'Roboto Mono';
+            cell1.style.textAlign = 'center';
+            cell1.style.fontSize = '1vw';
+
+            cell2.style.fontFamily = 'Roboto Mono';
+            cell2.style.textAlign = 'center';
+            cell2.style.fontSize = '1vw';
+
+            cell3.style.fontFamily = 'Roboto Mono';
+            cell3.style.textAlign = 'center';
+            cell3.style.fontSize = '1vw';
+
+            cell4.style.fontFamily = 'Roboto Mono';
+            cell4.style.textAlign = 'center';
+            cell4.style.fontSize = '1vw';
+
+            if (i !== 0 && (new_cases[i] < new_cases[i - 1]))
+            {
+                cell2.style.background = 'rgb(145,194,151)'
+            }
+            else if (i !== 0 && (new_cases[i] > new_cases[i - 1]))
+            {
+                cell2.style.background = 'rgb(255,147,154)'
+            }
+
+            if (i !== 0 && (new_deaths[i] < new_deaths[i - 1]))
+            {
+                cell4.style.background = 'rgb(145,194,151)'
+            }
+            else if (i !== 0 && (new_deaths[i] > new_deaths[i - 1]))
+            {
+                cell4.style.background = 'rgb(255,147,154)'
+            }
+        }
+    }
+
+    //overview and history control page switching niceties
+    function overview()
+    {
+        page = 'overview';
+
+        document.getElementById('overviewcontainer').style.visibility = 'visible';
+        document.getElementById('tablecontainer').style.visibility = 'hidden';
+        document.getElementById('chartcontainer').style.visibility = 'hidden';
+        document.getElementById('graphcontainer').style.visibility = 'hidden'
+        document.getElementById('overview').style.color = 'white';
+        document.getElementById('overview').style.backgroundColor = '#23395d';
+        document.getElementById('history').style.color = 'black';
+        document.getElementById('history').style.backgroundColor = 'lightgrey';
+        document.getElementById('graphing').style.color = 'black';
+        document.getElementById('graphing').style.backgroundColor = 'lightgrey';
+    }
+
+    function history()
+    {
+        page = 'history';
+
+        document.getElementById('overviewcontainer').style.visibility = 'hidden';
+        document.getElementById('tablecontainer').style.visibility = 'visible'
+        document.getElementById('chartcontainer').style.visibility = 'visible'
+        document.getElementById('graphcontainer').style.visibility = 'hidden'
+        document.getElementById('overview').style.color = 'black';
+        document.getElementById('overview').style.backgroundColor = 'lightgrey';
+        document.getElementById('history').style.color = 'white';
+        document.getElementById('history').style.backgroundColor = '#23395d';
+        document.getElementById('graphing').style.color = 'black';
+        document.getElementById('graphing').style.backgroundColor = 'lightgrey';
+    }
+    function graphing()
+    {
+        page = 'graphing';
+
+        document.getElementById('overviewcontainer').style.visibility = 'hidden';
+        document.getElementById('tablecontainer').style.visibility = 'hidden'
+        document.getElementById('chartcontainer').style.visibility = 'hidden'
+        document.getElementById('graphcontainer').style.visibility = 'visible'
+        document.getElementById('overview').style.color = 'black';
+        document.getElementById('overview').style.backgroundColor = 'lightgrey';
+        document.getElementById('history').style.color = 'black';
+        document.getElementById('history').style.backgroundColor = 'lightgrey';
+        document.getElementById('graphing').style.color = 'white';
+        document.getElementById('graphing').style.backgroundColor = '#23395d';
+
+    }
+
+    function getScrollBarWidth () {
+        var inner = document.createElement('p');
+        inner.style.width = "100%";
+        inner.style.height = "200px";
+
+        var outer = document.createElement('div');
+        outer.style.position = "absolute";
+        outer.style.top = "0px";
+        outer.style.left = "0px";
+        outer.style.visibility = "hidden";
+        outer.style.width = "200px";
+        outer.style.height = "150px";
+        outer.style.overflow = "hidden";
+        outer.appendChild (inner);
+
+        document.body.appendChild (outer);
+        var w1 = inner.offsetWidth;
+        outer.style.overflow = 'scroll';
+        var w2 = inner.offsetWidth;
+        if (w1 == w2) w2 = outer.clientWidth;
+
+        document.body.removeChild (outer);
+
+        return (w1 - w2);
+    };
+
+    function chartDestruction()
+    {
+        $('#rawvals').empty();
+        total_deaths_chart.destroy();
+        new_deaths_chart.destroy();
+        total_cases_chart.destroy();
+        new_cases_chart.destroy();
+    }
+
+</script>
 
